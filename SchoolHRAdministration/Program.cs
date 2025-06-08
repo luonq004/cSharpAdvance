@@ -1,5 +1,5 @@
 ﻿using HRAdministrationAPI;
-using System.ComponentModel;
+
 
 namespace SchoolHRAdministration
 {
@@ -16,6 +16,7 @@ namespace SchoolHRAdministration
 
             seedData(employees);
             Console.WriteLine($"Total Salary: {employees.Sum(e => e.Salary)}");
+            Console.ReadKey();
         }
 
         public static void seedData(List<IEmployee> employees)
@@ -32,7 +33,7 @@ namespace SchoolHRAdministration
             IEmployee deputyHeadMaster = EmployeeFactory.GetEmployeeInstance(EmployeeType.DeputyHeadMaster, 4, "Quan", "Vu", 14000);
             employees.Add(deputyHeadMaster);
 
-            IEmployee headMaster = EmployeeFactory.GetEmployeeInstance(EmployeeType.HeadMaster, 5, "Tong", "Giang", 12400);
+            IEmployee headMaster = EmployeeFactory.GetEmployeeInstance(EmployeeType.HeadMaster, 5, "Tong", "Giang", 90400);
             employees.Add(headMaster);
         }
     }
@@ -67,20 +68,34 @@ namespace SchoolHRAdministration
             switch (employeeType)
             {
                 case EmployeeType.Teacher:
-                    employee = new Teacher { Id = id, FirstName = firstName, LastName = lastName, Salary = salary };
+                    employee = FactoryPattern<IEmployee, Teacher>.GetInstance();
+                        //new Teacher { Id = id, FirstName = firstName, LastName = lastName, Salary = salary };
                     break;
                 case EmployeeType.HeadOfDepartment:
-                    employee = new HeadOfDepartment { Id = id, FirstName = firstName, LastName=lastName, Salary = salary };
+                    employee = FactoryPattern<IEmployee, HeadOfDepartment>.GetInstance();
+                        //new HeadOfDepartment { Id = id, FirstName = firstName, LastName=lastName, Salary = salary };
                     break;
                 case EmployeeType.DeputyHeadMaster:
-                    employee = new HeadOfDepartment { Id = id, FirstName = firstName, LastName = lastName, Salary = salary };
+                    employee = FactoryPattern<IEmployee, DeputyHeadMaster>.GetInstance();
+                        //new HeadOfDepartment { Id = id, FirstName = firstName, LastName = lastName, Salary = salary };
                     break;
                 case EmployeeType.HeadMaster:
-                    employee = new HeadOfDepartment { Id = id, FirstName = firstName, LastName = lastName, Salary = salary };
+                    employee = FactoryPattern<IEmployee, HeadMaster>.GetInstance();
+                    //new HeadOfDepartment { Id = id, FirstName = firstName, LastName = lastName, Salary = salary };
                     break;
                 default:
                     break;
-
+            }
+            if (employee != null)
+            {
+                employee.Id = id;
+                employee.FirstName = firstName;
+                employee.LastName = lastName;
+                employee.Salary = salary;
+            }
+            else
+            {
+                throw new NullReferenceException();
             }
 
             return employee;
