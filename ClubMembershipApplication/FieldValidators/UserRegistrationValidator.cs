@@ -1,4 +1,5 @@
-﻿using FieldValidatorAPI;
+﻿using ClubMembershipApplication.Data;
+using FieldValidatorAPI;
 
 namespace ClubMembershipApplication.FieldValidators
 {
@@ -12,6 +13,7 @@ namespace ClubMembershipApplication.FieldValidators
         delegate bool EmailExistsDel(string emailAddress);
 
         FieldvalidatorDel _fieldvalidatorDel = null;
+
         RequiredValidDel _requiredValidDel = null;
         StringLengthValidDel _stringLengthValidDel = null;
         DateValidDel _dateValidDel = null;
@@ -20,6 +22,7 @@ namespace ClubMembershipApplication.FieldValidators
         EmailExistsDel _emailExistsDel = null;
 
         string[] _fieldArray = null;
+        IRegister _register = null;
 
         public string[] FieldArray
         {
@@ -36,11 +39,17 @@ namespace ClubMembershipApplication.FieldValidators
 
         public FieldvalidatorDel ValidatorDel => _fieldvalidatorDel;
 
+        public UserRegistrationValidator(IRegister register)
+        {
+            _register = register;
+        }
+
         public FieldvalidatorDel validationDel => throw new NotImplementedException();
 
         public void InitialiseValidatorDelegates()
         {
             _fieldvalidatorDel = new FieldvalidatorDel(ValidField);
+            _emailExistsDel = new EmailExistsDel(_register.EmailExist);
 
             _requiredValidDel = CommonFieldValidatorFunctions.RequiredValidDel;
             _stringLengthValidDel = CommonFieldValidatorFunctions.StringLengthValidDel;
@@ -64,6 +73,10 @@ namespace ClubMembershipApplication.FieldValidators
 
                     fieldInvalidMessage = (fieldInvalidMessage == "" && !_patternMatchValidDel(fieldValue, CommonRegularExpressionValidationPatterns.Email_Address_RegEx_Pattern)) ?
                         $"You must enter a value for email address{Environment.NewLine}"
+                        : fieldInvalidMessage;
+
+                    fieldInvalidMessage = (fieldInvalidMessage == "" && !_emailExistsDel(fieldValue)) ?
+                        $"This email address already  exists{Environment.NewLine}"
                         : fieldInvalidMessage;
                     break;
 
