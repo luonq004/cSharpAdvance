@@ -44,8 +44,6 @@ namespace ClubMembershipApplication.FieldValidators
             _register = register;
         }
 
-        public FieldvalidatorDel validationDel => throw new NotImplementedException();
-
         public void InitialiseValidatorDelegates()
         {
             _fieldvalidatorDel = new FieldvalidatorDel(ValidField);
@@ -75,7 +73,7 @@ namespace ClubMembershipApplication.FieldValidators
                         $"You must enter a value for email address{Environment.NewLine}"
                         : fieldInvalidMessage;
 
-                    fieldInvalidMessage = (fieldInvalidMessage == "" && !_emailExistsDel(fieldValue)) ?
+                    fieldInvalidMessage = (fieldInvalidMessage == "" && _emailExistsDel(fieldValue)) ?
                         $"This email address already  exists{Environment.NewLine}"
                         : fieldInvalidMessage;
                     break;

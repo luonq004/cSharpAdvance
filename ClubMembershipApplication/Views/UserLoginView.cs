@@ -18,12 +18,12 @@ namespace ClubMembershipApplication.Views
         public void RunView()
         {
             CommonOutputText.WriteMainHeading();
-            CommonOutputText.WriteRegistrationHeading();
+            CommonOutputText.WriteLoginHeading();
 
-            Console.WriteLine("Please enter your email address");
+            Console.Write("Please enter your email: ");
             string emailAddress = Console.ReadLine();
 
-            Console.WriteLine("Please enter your password");
+            Console.Write("Please enter your password: ");
             string password = Console.ReadLine();
 
             User user = _loginUser.Login(emailAddress, password);

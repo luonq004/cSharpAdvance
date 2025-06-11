@@ -1,4 +1,6 @@
-﻿using ClubMembershipApplication.Views;
+﻿using ClubMembershipApplication.Data;
+using ClubMembershipApplication.FieldValidators;
+using ClubMembershipApplication.Views;
 
 namespace ClubMembershipApplication
 {
@@ -6,7 +8,16 @@ namespace ClubMembershipApplication
     {
         public static IView GetMainViewObject()
         {
+            ILogin login = new LoginUser();
+            IRegister register = new RegisterUser();
+            IFieldValidators userRegistrationValidator = new UserRegistrationValidator(register);
+            userRegistrationValidator.InitialiseValidatorDelegates();
 
+            IView registerView = new UserRegistrationView(register, userRegistrationValidator);
+            IView loginView = new UserLoginView(login);
+            IView mainView = new MainView(registerView, loginView);
+
+            return mainView;
         }
     }
 }

@@ -5,6 +5,6 @@
     {
         void InitialiseValidatorDelegates();
         string[] FieldArray { get; }
-        FieldvalidatorDel validationDel { get; }
+        FieldvalidatorDel ValidatorDel { get; }
     }
 }
